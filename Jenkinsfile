@@ -4,7 +4,7 @@ pipeline {
     environment {
         REMOTE_USER = 'jenkinsdeploy'          // user SSH vào app server
         REMOTE_HOST = '192.168.11.21'         // IP máy App Server
-        REMOTE_PATH = '/var/www/html'   // Thư mục nhận file
+        REMOTE_PATH = '/home/jenkinsdeploy/sourcecode'   // Thư mục nhận file
     }
 
     stages {
@@ -40,7 +40,10 @@ pipeline {
                     fi'
             """
                     // add mew files
-                    sh 'scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}'
+                    sh 'scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}\                    \
+                        sudo mv /home/jenkinsdeploy/sourcecode/index.html /var/www/html/index.html && \
+                        sudo chown www-data:www-data /var/www/html/index.html && \
+                        sudo chmod 644 /var/www/html/index.html'
                     echo ' Ket thuc deploy'
                 }
             }
