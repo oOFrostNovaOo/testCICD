@@ -41,11 +41,13 @@ pipeline {
                         """
                     
                     // add mew files
-                    sh 'scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}\                    \
+                    sh """
+                        scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}\                    \
                         sudo mv /home/jenkinsdeploy/sourcecode/index.html /var/www/html/index.html && \
                         sudo chown www-data:www-data /var/www/html/index.html && \
-                        sudo chmod 644 /var/www/html/index.html'
-                    echo ' Ket thuc deploy'
+                        sudo chmod 644 /var/www/html/index.html
+                    """
+                    echo 'Ket thuc deploy'
                 }
             }
         }
