@@ -19,8 +19,15 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/oOFrostNovaOo/testCICD.git'
             }
         }
+
+        stage('Build') {
+            steps {
+                echo 'Start building code'
+                echo 'Finish building' 
+            }
+        }
         
-        stage('Check HTML Syntax') {
+        stage('Test HTML Syntax') {
             steps {
                 echo 'Check syntax of HTML...'
                 sh 'tidy -e index.html'
