@@ -29,25 +29,28 @@ pipeline {
 
         stage('Deploy via SCP') {
             steps {
-                sshagent(['847307a5-45c9-414e-a7a4-586781eef522']) { // ID của SSH Credential bạn đã tạo trong Jenkins
-                    //backup old files
+                sshagent(['847307a5-45c9-414e-a7a4-586781eef522']) {
+                    
+                    // Backup file index.html nếu có
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '\
                             if [ -f ${REMOTE_PATH}/index.html ]; then \
-                                cp ${REMOTE_PATH}/index.html ${REMOTE_PATH}/index.html.bak_$(date +%Y%m%d%H%M%S); \
+                                cp ${REMOTE_PATH}/index.html ${REMOTE_PATH}/index.html.bak; \
                             else \
                                 echo "No previous index.html to backup."; \
                             fi'
-                        """
-                    
-                    // add mew files
-                    sh """
-                        scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}\                    \
-                        sudo mv /home/jenkinsdeploy/sourcecode/index.html /var/www/html/index.html && \
-                        sudo chown www-data:www-data /var/www/html/index.html && \
-                        sudo chmod 644 /var/www/html/index.html
                     """
-                    echo 'Ket thuc deploy'
+        
+                    // Copy file mới và chuyển tới web folder
+                    sh """
+                        scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/index.html
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '\
+                            sudo mv ${REMOTE_PATH}/index.html /var/www/html/index.html && \
+                            sudo chown www-data:www-data /var/www/html/index.html && \
+                            sudo chmod 644 /var/www/html/index.html'
+                    """
+        
+                    echo 'Kết thúc deploy'
                 }
             }
         }
