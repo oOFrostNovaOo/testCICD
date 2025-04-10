@@ -20,9 +20,10 @@ pipeline {
             }
         }
         
-        stage('Check Workspace') {
+        stage('Check HTML Syntax') {
             steps {
-                sh 'ls -lh'
+                echo 'Check syntax of HTML...'
+                sh 'tidy -e index.html'
             }
         }
 
