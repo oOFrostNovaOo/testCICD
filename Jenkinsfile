@@ -32,13 +32,14 @@ pipeline {
                 sshagent(['847307a5-45c9-414e-a7a4-586781eef522']) { // ID của SSH Credential bạn đã tạo trong Jenkins
                     //backup old files
                     sh """
-                ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '\
-                    if [ -f ${REMOTE_PATH}/index.html ]; then \
-                        cp ${REMOTE_PATH}/index.html ${REMOTE_PATH}/index.html.bak_$(date +%Y%m%d%H%M%S); \
-                    else \
-                        echo "No previous index.html to backup."; \
-                    fi'
-            """
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '\
+                            if [ -f ${REMOTE_PATH}/index.html ]; then \
+                                cp ${REMOTE_PATH}/index.html ${REMOTE_PATH}/index.html.bak_$(date +%Y%m%d%H%M%S); \
+                            else \
+                                echo "No previous index.html to backup."; \
+                            fi'
+                        """
+                    
                     // add mew files
                     sh 'scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}\                    \
                         sudo mv /home/jenkinsdeploy/sourcecode/index.html /var/www/html/index.html && \
