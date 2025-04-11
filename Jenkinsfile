@@ -1,65 +1,23 @@
 pipeline {
-    agent any
+  agent any
 
-    environment {
-        REMOTE_USER = 'jenkinsdeploy'          // user SSH vào app server
-        REMOTE_HOST = '192.168.11.21'         // IP máy App Server
-        REMOTE_PATH = '/home/jenkinsdeploy/sourcecode'   // Thư mục nhận file
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/your-org/your-repo.git'
+      }
     }
 
-    stages {
-        stage('Start Pipeline') {
-            steps {
-                echo 'Bắt đầu chạy Jenkinsfile từ GitHub repository'
-            }
-        }
-        
-        stage('Clone Code') {
-            steps {
-                git branch: 'main', url: 'https://github.com/oOFrostNovaOo/testCICD.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Start building code'
-                echo 'Finish building' 
-            }
-        }
-        
-        stage('Test HTML Syntax') {
-            steps {
-                echo 'Check syntax of HTML...'
-                sh 'tidy -e index.html'
-            }
-        }
-
-        stage('Deploy via SCP') {
-            steps {
-                sshagent(['847307a5-45c9-414e-a7a4-586781eef522']) {
-                    
-                    // Backup file index.html nếu có
-                    sh """
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '\
-                            if [ -f ${REMOTE_PATH}/index.html ]; then \
-                                cp ${REMOTE_PATH}/index.html ${REMOTE_PATH}/index.html.bak; \
-                            else \
-                                echo "No previous index.html to backup."; \
-                            fi'
-                    """
-        
-                    // Copy file mới và chuyển tới web folder
-                    sh """
-                        scp -v -o StrictHostKeyChecking=no index.html ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/index.html
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '\
-                            sudo mv ${REMOTE_PATH}/index.html /var/www/html/index.html && \
-                            sudo chown www-data:www-data /var/www/html/index.html && \
-                            sudo chmod 644 /var/www/html/index.html'
-                    """
-        
-                    echo 'Kết thúc deploy'
-                }
-            }
-        }
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t hello-nginx:latest .'
+      }
     }
+
+    stage('Deploy to Swarm') {
+      steps {
+        sh 'docker service update --image hello-nginx:latest hello_service || docker service create --name hello_service -p 8081:80 hello-nginx:latest'
+      }
+    }
+  }
 }
