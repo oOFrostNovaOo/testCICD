@@ -29,7 +29,7 @@ pipeline {
       steps {
         sh '''
           docker service inspect hello_service >/dev/null 2>&1 && \
-          docker service update --image 192.168.11.11:5000/hello-nginx:latest hello_service || \
+          docker service rm hello_service || \
           docker service create --name hello_service --replicas 1 --publish 8081:80 \
             --with-registry-auth \
             --constraint "node.labels.role == web" \
