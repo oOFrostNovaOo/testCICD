@@ -2,12 +2,9 @@ pipeline {
   agent any
 
   stages {
-    steps {
-      cleanWs()
-      git 'https://github.com/oOFrostNovaOo/testCICD.git'
-    }
     stage('Checkout') {
       steps {
+        cleanWs()
         git 'https://github.com/oOFrostNovaOo/testCICD.git'
       }
     }
