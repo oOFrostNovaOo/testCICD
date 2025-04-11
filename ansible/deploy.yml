@@ -1,0 +1,14 @@
+- name: Triển khai ứng dụng Nginx
+  hosts: web
+  become: true
+  tasks:
+    - name: Cài Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Copy file index.html
+      copy:
+        src: ./index.html
+        dest: /var/www/html/index.html
