@@ -24,11 +24,7 @@ pipeline {
       }
     }
 
-    stage('Deploy with Ansible') {
-      steps {
-        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
-      }
-    }
+    
     
     stage('Deploy to Swarm') {
       steps {
@@ -40,6 +36,12 @@ pipeline {
             --mount type=bind,source=/home/ubuntu/sourcecode,target=/usr/share/nginx/html \
             192.168.11.11:5000/hello-nginx:latest
         '''
+      }
+    }
+
+    stage('Deploy with Ansible') {
+      steps {
+        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
       }
     }
 
