@@ -11,5 +11,5 @@
         mode: '0755'
     - name: Copy file index.html
       copy:
-        src: ./web-sc/index.html
+        src: ../web-sc/index.html
         dest: /home/ubuntu/sourcecode/
