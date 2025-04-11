@@ -33,6 +33,7 @@ pipeline {
           docker service create --name hello_service --replicas 1 --publish 8081:80 \
             --with-registry-auth \
             --constraint "node.labels.role == web" \
+            --mount type=bind,source=/home/ubuntu/sourcecode,target=/usr/share/nginx/html \
             192.168.11.11:5000/hello-nginx:latest
         '''
       }
