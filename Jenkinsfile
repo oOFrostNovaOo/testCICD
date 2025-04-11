@@ -24,7 +24,12 @@ pipeline {
       }
     }
 
-
+    stage('Deploy with Ansible') {
+      steps {
+        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+      }
+    }
+    
     stage('Deploy to Swarm') {
       steps {
         sh '''
@@ -38,10 +43,6 @@ pipeline {
       }
     }
 
-    stage('Deploy with Ansible') {
-      steps {
-        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
-      }
-    }
+    
   }
 }
