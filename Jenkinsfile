@@ -5,7 +5,7 @@ pipeline {
     stage('Checkout') {
       steps {
         cleanWs()
-        git 'https://github.com/oOFrostNovaOo/testCICD.git'
+        git branch: 'main', url: 'https://github.com/oOFrostNovaOo/testCICD.git'
       }
     }
 
