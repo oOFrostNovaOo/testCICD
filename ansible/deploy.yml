@@ -3,12 +3,12 @@
   become: true
   tasks:
     - name: creating dir /home/ubuntu/sourcecode
-        file:
-          path: /home/ubuntu/sourcecode
-          state: directory
-          owner: ubuntu
-          group: ubuntu
-          mode: '0755'
+      file:
+        path: /home/ubuntu/sourcecode
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
     - name: Copy file index.html
       copy:
         src: ./web-sc/index.html
