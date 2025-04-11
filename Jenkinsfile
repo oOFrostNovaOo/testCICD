@@ -20,9 +20,12 @@ pipeline {
         sh """
           docker service inspect hello_service >/dev/null 2>&1 && \
           docker service update --image hello-nginx:latest hello_service || \
-          docker service create --name hello_service -p 8081:80 hello-nginx:latest
-          """
-        }
+          docker service create --name hello_service -p 8081:80 \
+            --constraint 'node.labels.role == web' \
+            --mount type=bind,source=/home/ubuntu/sourcecode,target=/usr/share/nginx/html \
+            hello-nginx:latest
+        """
+      }
     }
 
     stage('Deploy with Ansible') {
