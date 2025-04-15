@@ -111,7 +111,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@192.168.11.21
 
 ### ✅ 5. Jenkinsfile – CI/CD pipeline
 
-####groovy
+```groovy
 pipeline {
   agent any
 
@@ -153,7 +153,7 @@ pipeline {
     }
   }
 }
-############################
+```
 
 ---
 
