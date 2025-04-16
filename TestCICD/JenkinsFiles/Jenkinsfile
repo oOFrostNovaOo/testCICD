@@ -5,7 +5,7 @@ pipeline {
     stage('Checkout') {
       steps {
         cleanWs()
-        git branch: 'main', url: 'https://github.com/oOFrostNovaOo/testCICD.git'
+        git branch: 'master', url: 'https://github.com/oOFrostNovaOo/testCICD.git'
       }
     }
 
@@ -15,7 +15,7 @@ pipeline {
           # Debug
           ls
           # Build image
-          docker build -t hello-nginx:latest  -f ./TestCICD/SourceCode/Dockerfile ./TestCICD/SourceCode/web-sc/
+          docker build -t hello-nginx:latest  -f ./TestCICD/SourceCode/Dockerfile ./TestCICD/ansible/files/
 
           # Tag lại image với địa chỉ local registry
           docker tag hello-nginx:latest 192.168.1.201:5000/hello-nginx:latest
