@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - cicd_stack
+    deploy:
+      placement:
+        constraints: [node.hostname == vm01]
+
+networks:
+  cicd_stack:
+    external: true

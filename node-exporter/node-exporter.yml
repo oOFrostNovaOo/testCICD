@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  node-exporter:
+    image: prom/node-exporter
+    networks:
+      - cicd_stack
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+    ports:
+      - target: 9100
+        published: 9100
+        mode: host
+
+networks:
+  cicd_stack:
+    external: true
