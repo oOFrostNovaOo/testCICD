@@ -1,0 +1,13 @@
+### Cả hai service đều vào cùng 1 stack tên là cicd_stack, check 
+
+### Bước 5: Truy cập & kết nối
+
+Truy cập Prometheus: http://192.168.11.11:9090
+
+Truy cập Grafana: http://192.168.11.12:3000
+
+Đăng nhập Grafana: admin / admin
+
+Add Prometheus làm data source:
+
+URL: http://prometheus:9090 (dùng tên service là được vì chung overlay network)
