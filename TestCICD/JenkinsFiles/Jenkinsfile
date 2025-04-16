@@ -12,6 +12,8 @@ pipeline {
     stage('Build and Push Docker Image') {
       steps {
         sh '''
+          # Debug
+          ls -R
           # Build image
           docker build -t hello-nginx:latest  -f SourceCode/Dockerfile .
 
