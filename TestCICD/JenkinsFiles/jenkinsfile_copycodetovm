@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REMOTE_USER = 'jenkinsdeploy'          // user SSH vào app server
-        REMOTE_HOST = '192.168.11.21'         // IP máy App Server
+        REMOTE_HOST = '192.168.1.202'         // IP máy App Server
         REMOTE_PATH = '/home/jenkinsdeploy/sourcecode'   // Thư mục nhận file
     }
 

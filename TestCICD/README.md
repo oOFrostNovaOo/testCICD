@@ -104,7 +104,7 @@ docker stack services jenkins_stack
 
 ```bash
 ssh-keygen -t rsa -b 4096
-ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@192.168.11.21
+ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@192.168.1.202
 ```
 
 ---
@@ -178,7 +178,7 @@ pipeline {
 📄 `ansible/inventory.ini`
 ```ini
 [web]
-worker-node-1 ansible_host=192.168.11.21 ansible_user=ubuntu
+worker-node-1 ansible_host=192.168.1.202 ansible_user=ubuntu
 ```
 
 📄 `ansible/deploy.yml`

@@ -19,6 +19,6 @@ fi
 
 # Copy the public key to the server
 echo "Copying public key to $SERVER_ADDRESS..."
-ssh-copy-id -i "$SSH_KEY.pub" "$SERVER_ADDRESS"
+ssh-copy-id -i "$SSH_KEY.pub" "ubuntu@$SERVER_ADDRESS"
 
 echo "SSH key successfully copied to $SERVER_ADDRESS."

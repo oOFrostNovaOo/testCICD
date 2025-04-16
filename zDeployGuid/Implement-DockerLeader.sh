@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Kiểm tra xem IP remote node có được nhập không
+if [ -z "$1" ]; then
+  echo "Vui lòng nhập IP của remote node."
+  exit 1
+fi
+
+# Manager info
+MANAGER_IP="192.168.1.201"          # IP của manager (có thể thay đổi nếu cần)
+SSH_USER="ubuntu"                   # user để SSH vào node remote
+NODE_IP="$1"                         # IP của remote node được nhập từ đối số
+
 # Update and upgrade the system
 sudo apt update && sudo apt upgrade -y
 
@@ -32,6 +43,20 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 sudo systemctl enable docker
 sudo systemctl start docker
 
-usermod -aG docker $USER
+sudo usermod -aG docker $USER
+
+sudo docker swarm init
+
+# Verify Docker installation
+docker --version
+docker swarm --version
+docker-compose --version    
 
 echo "Docker Swarm, Terraform, and Ansible have been successfully installed."
+
+# Lấy token từ manager (giả sử bạn đang chạy script này trên chính manager)
+SWARM_TOKEN=$(docker swarm join-token -q worker)
+
+# SSH vào node remote và join swarm
+echo "Đang join node ${NODE_IP} vào swarm với manager ${MANAGER_IP}..."
+ssh ${SSH_USER}@${NODE_IP} "docker swarm join --token ${SWARM_TOKEN} ${MANAGER_IP}:2377"
