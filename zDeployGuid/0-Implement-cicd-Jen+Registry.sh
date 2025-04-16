@@ -25,6 +25,13 @@ fi
 #docker build custom/jenkins image
 docker build -t custom/img-jenk-ans-ter -f ../jenkins/dockerfile .
 
+# Add insecure registry to Docker daemon configuration
+# Check if the Docker daemon configuration file exists
+sudo jq '. + { "insecure-registries": ["192.168.1.201:5000"] }' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json.new && \
+sudo mv /etc/docker/daemon.json.new /etc/docker/daemon.json && \
+sudo systemctl restart docker
+
+
 docker stack deploy -c ../jenkins/docker-compose.yml cicd_stack
 docker stack deploy -c ../registry/docker-compose.yml cicd_stack
 

@@ -15,7 +15,7 @@ pipeline {
           # Debug
           ls
           # Build image
-          docker build -t hello-nginx:latest  -f /Dockerfile ./TestCICD/SourceCode
+          docker build -t hello-nginx:latest  -f ./TestCICD/SourceCode/Dockerfile ./TestCICD/SourceCode/web-sc/
 
           # Tag lại image với địa chỉ local registry
           docker tag hello-nginx:latest 192.168.1.201:5000/hello-nginx:latest
@@ -24,7 +24,13 @@ pipeline {
           docker push 192.168.1.201:5000/hello-nginx:latest
         '''
       }
-    }    
+    }  
+
+    stage('Deploy with Ansible') {
+      steps {
+        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+      }
+    }
     
     stage('Deploy to Swarm') {
       steps {

@@ -9,6 +9,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "9090:9090"
+      - "8080:8090"
     networks:
       - cicd_stack
     deploy:

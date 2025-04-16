@@ -16,4 +16,11 @@ sudo systemctl start docker
 
 sudo usermod -aG docker $USER
 
-echo "Docker Swarm, Terraform, and Ansible have been successfully installed."
+# Verify Docker installation
+docker --version
+docker swarm --version
+docker-compose --version  
+
+echo "Docker Swarm has been successfully installed."
+
+#docker node update --label-add role=webapp "$(docker info -f '{{.Name}}')"
