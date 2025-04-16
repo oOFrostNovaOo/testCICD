@@ -43,14 +43,6 @@ pipeline {
             192.168.1.201:5000/hello-nginx:latest
         '''
       }
-    }
-
-    stage('Deploy with Ansible') {
-      steps {
-        sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
-      }
-    }
-
-    
+    }    
   }
 }
