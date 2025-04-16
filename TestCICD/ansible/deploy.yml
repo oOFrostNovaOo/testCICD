@@ -16,7 +16,7 @@
 
     - name: Copy file index.html
       copy:
-        src: ../web-sc/index.html
+        src: index.html
         dest: /home/ubuntu/sourcecode/
     
     
