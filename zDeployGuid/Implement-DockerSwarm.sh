@@ -32,9 +32,6 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 sudo systemctl enable docker
 sudo systemctl start docker
 
-# Initialize Docker Swarm
-sudo docker swarm init
-
-# Get the join token for worker nodes
+usermod -aG docker $USER
 
 echo "Docker Swarm, Terraform, and Ansible have been successfully installed."
