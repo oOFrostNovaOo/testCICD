@@ -9,7 +9,14 @@
         owner: ubuntu
         group: ubuntu
         mode: '0755'
+
+    - name: Debug path to index.html
+      debug:
+      msg: "{{ playbook_dir }}/web-sc/index.html"
+
     - name: Copy file index.html
       copy:
         src: ../web-sc/index.html
         dest: /home/ubuntu/sourcecode/
+    
+    
