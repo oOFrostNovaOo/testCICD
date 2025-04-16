@@ -2,9 +2,9 @@
 
 ### Bước 5: Truy cập & kết nối
 
-Truy cập Prometheus: http://192.168.11.11:9090
+Truy cập Prometheus: http://192.168.1.201:9090
 
-Truy cập Grafana: http://192.168.11.12:3000
+Truy cập Grafana: http://192.168.1.202:3000
 
 Đăng nhập Grafana: admin / admin
 
