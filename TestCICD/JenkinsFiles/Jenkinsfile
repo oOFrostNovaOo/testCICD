@@ -13,7 +13,7 @@ pipeline {
       steps {
         sh '''
           # Debug
-          ls -R
+          pwd
           # Build image
           docker build -t hello-nginx:latest  -f SourceCode/Dockerfile .
 
