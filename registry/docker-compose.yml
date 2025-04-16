@@ -9,6 +9,8 @@ services:
       - cicd_stack
     volumes:
       - registry_data:/var/lib/registry
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     deploy:
       placement:
         constraints: [node.hostname == vm01]

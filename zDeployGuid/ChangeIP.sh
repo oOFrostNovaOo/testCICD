@@ -10,7 +10,7 @@ if [ -f "$NETPLAN_CONFIG" ]; then
 fi
 
 # Define the static IP configuration
-STATIC_IP="192.168.11.11"
+STATIC_IP="192.168.1.201"
 GATEWAY="192.168.11.1"
 DNS="8.8.8.8"
 INTERFACE=$(ip -o -4 route show to default | awk '{print $5}')

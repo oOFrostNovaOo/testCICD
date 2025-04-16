@@ -127,8 +127,8 @@ pipeline {
       steps {
         sh '''
           docker build -t hello-nginx:latest .
-          docker tag hello-nginx:latest 192.168.11.11:5000/hello-nginx:latest
-          docker push 192.168.11.11:5000/hello-nginx:latest
+          docker tag hello-nginx:latest 192.168.1.201:5000/hello-nginx:latest
+          docker push 192.168.1.201:5000/hello-nginx:latest
         '''
       }
     }
@@ -141,7 +141,7 @@ pipeline {
             --with-registry-auth \
             --constraint "node.labels.role == web" \
             --mount type=bind,source=/home/ubuntu/sourcecode,target=/usr/share/nginx/html \
-            192.168.11.11:5000/hello-nginx:latest
+            192.168.1.201:5000/hello-nginx:latest
         '''
       }
     }
@@ -215,7 +215,7 @@ docker node update --label-add role=web <node-id>
 ### ✅ 9. Kiểm tra image trên local registry
 
 ```bash
-curl http://192.168.11.11:5000/v2/hello-nginx/tags/list
+curl http://192.168.1.201:5000/v2/hello-nginx/tags/list
 ```
 
 ---
