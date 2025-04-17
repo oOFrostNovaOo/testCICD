@@ -34,18 +34,19 @@ function changeIP() {
 
     log_info "Updating Netplan config: $NETPLAN_FILE"
 
-    cat <<EOF | sudo tee "$NETPLAN_FILE" > /dev/null
+    cat > $NETPLAN_FILE <<EOL
 network:
-version: 2
-renderer: networkd
-ethernets:
-  $iface:
-    dhcp4: no
-    addresses: [$new_ip/24]
-    gateway4: $gateway
-    nameservers:
-      addresses: [$dns]
-EOF
+  version: 2
+  renderer: networkd
+  ethernets:
+    $iface:
+      addresses:
+        - $new_ip/24
+      gateway4: $gateway
+      nameservers:
+        addresses:
+          - $dns
+EOL
 
     sudo netplan apply
 }

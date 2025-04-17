@@ -82,8 +82,6 @@ while true; do
             ;;
         3) 
             changeHostname
-            log_info "Hostname changed to $new_hostname"
-			read -p "Press any key to continue..."
             ;;
         4) createSSHKeyAndDeploy ;;
         5)
