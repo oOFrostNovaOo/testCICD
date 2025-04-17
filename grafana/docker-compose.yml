@@ -6,12 +6,12 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - cicd_stack
+      - Infra_stack
     deploy:
       placement:
         constraints: [node.hostname == vm02]
     restart: always
     
 networks:
-  cicd_stack:
+  Infra_stack:
     external: true

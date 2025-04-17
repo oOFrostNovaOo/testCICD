@@ -15,11 +15,11 @@ fi
 # Deploy the Docker Compose stack
 echo "Deploying the Docker Compose stack..."
 # Check if the overlay network already exists
-if ! docker network ls | grep -q "cicd_stack"; then
-    echo "Creating overlay network 'cicd_stack'..."
-    docker network create --driver overlay cicd_stack
+if ! docker network ls | grep -q "Infra_stack"; then
+    echo "Creating overlay network 'Infra_stack'..."
+    docker network create --driver overlay Infra_stack
 else
-    echo "Overlay network 'cicd_stack' already exists."
+    echo "Overlay network 'Infra_stack' already exists."
 fi
 
 #docker build custom/jenkins image
@@ -32,7 +32,7 @@ sudo mv /etc/docker/daemon.json.new /etc/docker/daemon.json && \
 sudo systemctl restart docker
 
 
-docker stack deploy -c ../jenkins/docker-compose.yml cicd_stack
-docker stack deploy -c ../registry/docker-compose.yml cicd_stack
+docker stack deploy -c ../jenkins/docker-compose.yml Infra_stack
+docker stack deploy -c ../registry/docker-compose.yml Infra_stack
 
 echo "CICD stack has been deployed."

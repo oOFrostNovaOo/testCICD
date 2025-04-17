@@ -15,7 +15,7 @@ services:
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock
     networks:
-      - cicd_stack
+      - Infra_stack
     deploy:
       placement:
         constraints:
@@ -27,5 +27,5 @@ volumes:
   jenkins_data:
 
 networks:
-  cicd_stack:
+  Infra_stack:
     external: true
