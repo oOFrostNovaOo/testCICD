@@ -11,10 +11,23 @@ function changeIP() {
     iface=${iface:-$default_iface}
         
     #Type of IP address
-    read -p "Enter new static IP address (e.g., 192.168.1.100): " new_ip
-    #read -p "Enter Subnet Prefix (e.g., 24 for 255.255.255.0): " prefix
+    # Lấy IP hiện tại (ví dụ: 192.168.11.128)
+    current_ip=$(hostname -I | awk '{print $1}')
+    
+    # Tách các phần của IP hiện tại
+    IFS='.' read -ra ip_parts <<< "$current_ip"
+    
+    # Giữ lại ba octet đầu, chỉ yêu cầu người dùng nhập số cho octet cuối
+    new_octet=${ip_parts[3]}
+    read -p "Current IP is $current_ip. Enter new last octet (current: $new_octet): " last_octet
+    last_octet=${last_octet:-$new_octet}  # Nếu người dùng không nhập, dùng giá trị cũ
+    
+    # Tạo IP mới
+    new_ip="${ip_parts[0]}.${ip_parts[1]}.${ip_parts[2]}.$last_octet"
+    echo "New IP address: $new_ip"
 
-    # Đoạn mới - dùng gateway hiện tại làm mặc định
+
+    # GATEWAY dùng gateway hiện tại làm mặc định
     suggested_gw=$(ip route | awk '/default/ {print $3}' | head -n 1)
     read -p "Default gateway [${suggested_gw}]: " gateway
     gateway=${gateway:-$suggested_gw}
