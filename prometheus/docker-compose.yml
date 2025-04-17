@@ -11,11 +11,11 @@ services:
       - "9090:9090"
       - "8080:8090"
     networks:
-      - cicd_stack
+      - Infra_stack
     deploy:
       placement:
         constraints: [node.hostname == vm01]
 
 networks:
-  cicd_stack:
+  Infra_stack:
     external: true

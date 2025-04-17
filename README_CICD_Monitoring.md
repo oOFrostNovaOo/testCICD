@@ -5,7 +5,7 @@
 
 - **vm01**: `192.168.1.201` – Cài Jenkins, Prometheus, Node Exporter, Local Registry
 - **vm02**: `192.168.1.202` – Cài Grafana, Node Exporter
-- Docker Swarm đã được cấu hình sẵn, overlay network tên `cicd_stack` đã tạo.
+- Docker Swarm đã được cấu hình sẵn, overlay network tên `Infra_stack` đã tạo.
 
 ---
 
@@ -92,10 +92,10 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - cicd_stack
+      - Infra_stack
 
 networks:
-  cicd_stack:
+  Infra_stack:
     external: true
 ```
 
@@ -138,7 +138,7 @@ pipeline {
 1. Khởi động Docker Swarm:  
    ```bash
    docker swarm init
-   docker network create -d overlay cicd_stack
+   docker network create -d overlay Infra_stack
    ```
 
 2. Build Jenkins image:
@@ -149,7 +149,7 @@ pipeline {
 
 3. Deploy tất cả các dịch vụ:
    ```bash
-   docker stack deploy -c docker-compose.yml cicd_stack
+   docker stack deploy -c docker-compose.yml Infra_stack
    ```
 
 ---

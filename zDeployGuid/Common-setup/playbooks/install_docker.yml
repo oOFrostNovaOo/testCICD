@@ -1,0 +1,20 @@
+---
+- name: Install Docker on all nodes
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Update APT cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Enable & start Docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started

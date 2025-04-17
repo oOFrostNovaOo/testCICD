@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - cicd_stack
+      - Infra_stack
     volumes:
       - registry_data:/var/lib/registry
       - /etc/timezone:/etc/timezone:ro
@@ -19,5 +19,5 @@ volumes:
   registry_data:
 
 networks:
-  cicd_stack:
+  Infra_stack:
     external: true
