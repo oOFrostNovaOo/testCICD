@@ -11,5 +11,5 @@ function changeHostname() {
     fi
     sudo hostnamectl set-hostname "$new_hostname"
     log_info "Hostname changed to $new_hostname"
-    readp -p "Press any key to continue..."
+    read -p "Press any key to continue..."
 }

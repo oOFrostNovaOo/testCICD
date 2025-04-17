@@ -70,9 +70,22 @@ while true; do
     show_menu
     read -p "Select an option [1-4]: " choice
     case $choice in
-        1) changeIP ;;
-        2) changeTimezone ;;
-        3) changeHostname ;;
+        1) 
+			changeIP
+			log_info "IP address updated successfully."
+			read -p "Press any key to continue..."
+			;;
+        2) 
+			changeTimezone 
+			log_info "Timezone changed to $TIMEZONE"
+			read -p "Press any key to continue..."
+            ;;
+        3) 
+            changeHostname
+            log_info "Hostname changed to $new_hostname"
+			read -p "Press any key to continue..."
+            ;;
+            ;;
         4) createSSHKeyAndDeploy ;;
         5)
             log_info "Installing Ansible..."

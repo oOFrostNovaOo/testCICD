@@ -35,5 +35,5 @@ function createSSHKeyAndDeploy() {
     else
         log_error "Failed to deploy SSH key. Check connection or credentials."
     fi
-    readp -p "Press any key to continue..."
+    read -p "Press any key to continue..."
 }
