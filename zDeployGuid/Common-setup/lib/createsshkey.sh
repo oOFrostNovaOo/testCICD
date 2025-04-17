@@ -47,7 +47,22 @@ function createSSHKeyAndDeploy() {
 
     
     # Copy public key đến client
+<<<<<<< HEAD
     deploysshkey --user "$client_user" --key "$KEY_PATH.pub" --inventory "./inventory.ini" --group "workers"
+=======
+    deploysshkey.sh --user "$client_user" --key "$KEY_PATH.pub" --inventory "./inventory.ini" --group "workers"
+    if [ $? -eq 0 ]; then
+        log_info "SSH key deployed successfully. You can now connect without password:"
+        echo "    ssh ${client_user}@${client_ip}"
+    else
+        log_error "Failed to deploy SSH key. Check connection or credentials."
+    fi
+    log_info "-----------------------------------------------"
+    log_info "SSH key deployment completed."
+    log_info "You can now connect to the client without a password:"
+    log_info "    ssh ${client_user}@${client_ip}"
+    log_info "-----------------------------------------------"
+>>>>>>> 5249dcf5a88240aae9f9a5a5c530b25b214bf2f3
     log_info ""
     read -p "Press any key to continue..."
 }
