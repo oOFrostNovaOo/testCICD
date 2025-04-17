@@ -20,5 +20,4 @@ docker stack deploy -c ../prometheus/docker-compose.yml Infra_stack
 docker stack deploy -c ../node-exporter/node-exporter.yml Infra_stack
 docker stack deploy -c ../grafana/docker-compose.yml  Infra_stack
 
-
 echo "Infrastructure has been deployed."

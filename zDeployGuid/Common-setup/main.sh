@@ -6,7 +6,7 @@
 # Functions: change IP, timezone, and hostname
 # =========================================
 # Run this script with root privileges
-# hmod +x main.sh lib/*.sh
+# chmod +x main.sh lib/*.sh
 # sudo ./main.sh
 # =========================================
 
@@ -18,12 +18,13 @@ source ./lib/createsshkey.sh
 source ./lib/install_docker.sh
 source ./lib/install_ansible.sh
 source ./lib/install_terraform.sh
+source ./lib/deploysshkey.sh
 
 # Check if the script is run as root
-if [ "$EUID" -ne 0 ]; then
-    echo "Please run as root"
-    exit 1
-fi
+# if [ "$EUID" -ne 0 ]; then
+#     echo "Please run as root"
+#     exit 1
+# fi
 
 set -e
 
@@ -49,6 +50,9 @@ function log_error() {
 # Main Menu
 # ----------------------------------------
 function show_menu() {
+    echo ""
+    echo ""
+    echo "==============================================="
     echo "========= System Configuration Script ========="
     echo "1) Change IP Address"
     echo "2) Change Timezone to Ho Chi Minh City"
@@ -66,13 +70,14 @@ function show_menu() {
 # ----------------------------------------
 # Main script execution
 # ----------------------------------------
-while true; do
+while true; do    
     show_menu
     read -p "Select an option [0-9]: " choice
     case $choice in
         1) 
 			changeIP
 			log_info "IP address updated successfully."
+            hostname -I
 			read -p "Press any key to continue..."
 			;;
         2) 

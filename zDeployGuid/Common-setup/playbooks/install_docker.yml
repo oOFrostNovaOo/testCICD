@@ -4,14 +4,16 @@
   become: true
 
   tasks:
-    - name: Update APT cache
-      apt:
-        update_cache: yes
-
     - name: Install Docker
       apt:
         name: docker.io
         state: present
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
 
     - name: Enable & start Docker service
       systemd:
