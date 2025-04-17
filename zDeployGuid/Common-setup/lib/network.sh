@@ -5,10 +5,11 @@
 # ----------------------------------------
 function changeIP() {
     # Check NIC name
-    default_iface=$(ip route | awk '/default/ {print $5}' | head -n 1)
+    #default_iface=$(ip route | awk '/default/ {print $5}' | head -n 1)
+    default_iface=$(ip -o -4 route show to default | awk '{print $5}')
     read -p "Detected interface is '$default_iface'. Press Enter to accept or enter a different name: " iface
     iface=${iface:-$default_iface}
-
+        
     #Type of IP address
     read -p "Enter new static IP address (e.g., 192.168.1.100): " new_ip
     #read -p "Enter Subnet Prefix (e.g., 24 for 255.255.255.0): " prefix
@@ -38,12 +39,12 @@ network:
 version: 2
 renderer: networkd
 ethernets:
-	$iface:
-	dhcp4: no
-	addresses: [$new_ip/24]
-	gateway4: $gateway
-	nameservers:
-		addresses: [$dns]
+  $iface:
+    dhcp4: no
+    addresses: [$new_ip/24]
+    gateway4: $gateway
+    nameservers:
+      addresses: [$dns]
 EOF
 
     sudo netplan apply

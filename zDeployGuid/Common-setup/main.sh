@@ -68,7 +68,7 @@ function show_menu() {
 # ----------------------------------------
 while true; do
     show_menu
-    read -p "Select an option [1-4]: " choice
+    read -p "Select an option [0-9]: " choice
     case $choice in
         1) 
 			changeIP
@@ -84,7 +84,6 @@ while true; do
             changeHostname
             log_info "Hostname changed to $new_hostname"
 			read -p "Press any key to continue..."
-            ;;
             ;;
         4) createSSHKeyAndDeploy ;;
         5)
