@@ -14,9 +14,8 @@ function changeIP() {
     read -p "Enter new static IP address (e.g., 192.168.1.100): " new_ip
     #read -p "Enter Subnet Prefix (e.g., 24 for 255.255.255.0): " prefix
 
-    # Suggest default gateway
-    IFS='.' read -ra ip_parts <<< "$new_ip"
-    suggested_gw="${ip_parts[0]}.${ip_parts[1]}.${ip_parts[2]}.1"
+    # Đoạn mới - dùng gateway hiện tại làm mặc định
+    suggested_gw=$(ip route | awk '/default/ {print $3}' | head -n 1)
     read -p "Default gateway [${suggested_gw}]: " gateway
     gateway=${gateway:-$suggested_gw}
 
