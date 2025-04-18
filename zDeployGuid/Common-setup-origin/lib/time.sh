@@ -9,7 +9,9 @@ function changeTimezone() {
         echo "Please run as root"
         exit 1
     fi
-    
+    log_info "Changing timezone..."
+    # Set the timezone to Asia/Ho_Chi_Minh
     TIMEZONE="Asia/Ho_Chi_Minh"
     sudo timedatectl set-timezone "$TIMEZONE"
+    log_info "Timezone changed to $TIMEZONE"
 }

@@ -14,11 +14,12 @@
 source ./lib/network.sh
 source ./lib/hostname.sh
 source ./lib/time.sh
-source ./lib/createsshkey.sh
-source ./lib/install_docker.sh
-source ./lib/install_ansible.sh
-source ./lib/install_terraform.sh
-source ./lib/deploysshkey.sh
+#source ./lib/createsshkey.sh
+#source ./lib/install_docker.sh
+#source ./lib/install_ansible.sh
+#source ./lib/install_terraform.sh
+#source ./lib/deploysshkey.sh
+source ./lib/install_jq.sh
 
 # Check if the script is run as root
 # if [ "$EUID" -ne 0 ]; then
@@ -70,22 +71,25 @@ function show_menu() {
 # ----------------------------------------
 # Main script execution
 # ----------------------------------------
+log_info "Starting checking dependencies..."
+load_env
+echo ""
+echo '============================'
 while true; do    
-    show_menu
+    show_menu    
     read -p "Select an option [0-9]: " choice
     case $choice in
         1) 
-			changeHostname
-            hostname
-            log_info "Hostname changed successfully."            
+			changeHostname            
+                       
             changeTimezone 
-			log_info "Timezone changed to $TIMEZONE"
+			
             changeIP
 			log_info "IP address updated successfully."
             hostname -I
 			read -p "Press any key to continue..."
 			;;
-        2) 
+        2)
 			read -p "Press any key to continue..."
             ;;
         3)             
