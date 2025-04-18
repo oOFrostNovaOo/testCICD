@@ -60,7 +60,7 @@ function createSSHKeyAndDeploy() {
     log_info "You can now connect to the client without a password:"
     log_info "    ssh ${client_user}@${client_ip}"
     log_info "-----------------------------------------------"
->>>>>>> 5249dcf5a88240aae9f9a5a5c530b25b214bf2f3
+
     log_info ""
     read -p "Press any key to continue..."
 }

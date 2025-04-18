@@ -1,59 +1,41 @@
 #!/bin/bash
 
-# ----------------------------------------
-# Function: Change IP address (Ubuntu netplan)
-# ----------------------------------------
 function changeIP() {
-
-    # Check if the script is run as root
+    # Chạy dưới quyền root
     if [ "$EUID" -ne 0 ]; then
         echo "Please run as root"
         exit 1
     fi
-    
-    # Check NIC name
-    #default_iface=$(ip route | awk '/default/ {print $5}' | head -n 1)
-    default_iface=$(ip -o -4 route show to default | awk '{print $5}')
-    read -p "Detected interface is '$default_iface'. Press Enter to accept or enter a different name: " iface
-    iface=${iface:-$default_iface}
-        
-    #Type of IP address
-    # Lấy IP hiện tại (ví dụ: 192.168.11.128)
-    current_ip=$(hostname -I | awk '{print $1}')
-    
-    # Tách các phần của IP hiện tại
-    IFS='.' read -ra ip_parts <<< "$current_ip"
-    
-    # Giữ lại ba octet đầu, chỉ yêu cầu người dùng nhập số cho octet cuối
-    new_octet=${ip_parts[3]}
-    read -p "Current IP is $current_ip. Enter new last octet (current: $new_octet): " last_octet
-    last_octet=${last_octet:-$new_octet}  # Nếu người dùng không nhập, dùng giá trị cũ
-    
-    # Tạo IP mới
-    new_ip="${ip_parts[0]}.${ip_parts[1]}.${ip_parts[2]}.$last_octet"
-    echo "New IP address: $new_ip"
 
+    # Xác định interface mặc định
+    iface=$(ip -o -4 route show to default | awk '{print $5}')
+    [ -z "$iface" ] && { echo "Error: Cannot detect default interface"; exit 1; }
 
-    # GATEWAY dùng gateway hiện tại làm mặc định
-    suggested_gw=$(ip route | awk '/default/ {print $3}' | head -n 1)
-    read -p "Default gateway [${suggested_gw}]: " gateway
-    gateway=${gateway:-$suggested_gw}
+    # Lấy hostname hiện tại
+    host=$(hostname -s)
 
-    # Suggest DNS server    
-    read -p "Enter DNS server (default: 8.8.8.8): " dns
-    dns=${dns:-"8.8.8.8"}
+    env_file="./env.json"
+    [ ! -f "$env_file" ] && { echo "Error: env.json not found"; exit 1; }
 
-    # Find netplan config file
-    NETPLAN_FILE=$(find /etc/netplan -name "*.yaml" | head -n 1)
+    # Lấy IP mới từ env.json (default_ip)
+    new_ip=$(jq -r --arg name "$host" '
+        (.leader_nodes[]   | select(.name == $name) | .default_ip)
+        // (.worker_node_list[] | select(.name == $name) | .default_ip)
+    ' "$env_file")
+    [ -z "$new_ip" ] && { echo "Error: No matching default_ip for $host"; exit 1; }
 
-    if [ -z "$NETPLAN_FILE" ]; then
-        log_error "No netplan config found."
-        exit 1
-    fi
+    # Lấy gateway và DNS từ env.json
+    gateway=$(jq -r '.gateway' "$env_file")
+    dns_servers=$(jq -r '.dns | join(", ")' "$env_file")
 
-    log_info "Updating Netplan config: $NETPLAN_FILE"
+    # Tìm file Netplan
+    netplan_file=$(find /etc/netplan -type f -name '*.yaml' | head -n1)
+    [ -z "$netplan_file" ] && { echo "Error: No netplan config found"; exit 1; }
 
-    cat > $NETPLAN_FILE <<EOL
+    echo "[INFO] iface=$iface, new_ip=$new_ip, gateway=$gateway, dns=[$dns_servers]"
+
+    # Ghi cấu hình mới
+    cat > "$netplan_file" <<EOF
 network:
   version: 2
   renderer: networkd
@@ -63,9 +45,9 @@ network:
         - $new_ip/24
       gateway4: $gateway
       nameservers:
-        addresses:
-          - $dns
-EOL
+        addresses: [ $dns_servers ]
+EOF
 
-    sudo netplan apply
+    netplan apply
+    echo "[OK] IP changed to $new_ip on $iface"
 }

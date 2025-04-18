@@ -54,9 +54,9 @@ function show_menu() {
     echo ""
     echo "==============================================="
     echo "========= System Configuration Script ========="
-    echo "1) Change IP Address"
-    echo "2) Change Timezone to Ho Chi Minh City"
-    echo "3) Change Hostname"
+    echo "1) Change Hostname + Set IP + Change Timezone"
+    echo "2) "
+    echo "3) "
     echo "4) Create SSH Key & Deploy to Client"
     echo "5) Install Ansible"
     echo "6) Install Docker && setup Docker Swarm"
@@ -75,18 +75,21 @@ while true; do
     read -p "Select an option [0-9]: " choice
     case $choice in
         1) 
-			changeIP
+			changeHostname
+            hostname
+            log_info "Hostname changed successfully."            
+            changeTimezone 
+			log_info "Timezone changed to $TIMEZONE"
+            changeIP
 			log_info "IP address updated successfully."
             hostname -I
 			read -p "Press any key to continue..."
 			;;
         2) 
-			changeTimezone 
-			log_info "Timezone changed to $TIMEZONE"
 			read -p "Press any key to continue..."
             ;;
-        3) 
-            changeHostname
+        3)             
+			read -p "Press any key to continue..."
             ;;
         4) createSSHKeyAndDeploy ;;
         5)

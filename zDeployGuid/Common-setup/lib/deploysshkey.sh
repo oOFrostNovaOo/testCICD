@@ -1,6 +1,5 @@
 #!/bin/bash
 
-<<<<<<< HEAD
 # Function: Deploy SSH Key to Remote Hosts
 # This script deploys an SSH public key to a group of remote hosts defined in an Ansible inventory file.
 # It uses ssh-copy-id to copy the public key to each host in the specified group.
