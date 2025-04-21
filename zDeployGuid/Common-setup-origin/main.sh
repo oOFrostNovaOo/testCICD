@@ -11,15 +11,13 @@
 # =========================================
 
 #load library functions
+#source ./lib/load_env.sh
 source ./lib/network.sh
-source ./lib/hostname.sh
-source ./lib/time.sh
-#source ./lib/createsshkey.sh
-#source ./lib/install_docker.sh
-#source ./lib/install_ansible.sh
-#source ./lib/install_terraform.sh
-#source ./lib/deploysshkey.sh
-source ./lib/install_jq.sh
+source ./lib/install_docker.sh
+source ./lib/install_terraform.sh
+source ./lib/ansible_implement.sh
+source ./lib/install_ansible.sh
+
 
 # Check if the script is run as root
 # if [ "$EUID" -ne 0 ]; then
@@ -55,10 +53,10 @@ function show_menu() {
     echo ""
     echo "==============================================="
     echo "========= System Configuration Script ========="
-    echo "1) Change Hostname + Set IP + Change Timezone"
-    echo "2) "
-    echo "3) "
-    echo "4) Create SSH Key & Deploy to Client"
+    echo "1) Install Ansible"
+    echo "2) Ansible: Set IP address for clients"
+    echo "3) Change IP this machine"
+    echo "4) Deploy SSH key + Change Hostname + Change Timezone"
     echo "5) Install Ansible"
     echo "6) Install Docker && setup Docker Swarm"
     echo "7) Install Terraform"
@@ -72,33 +70,42 @@ function show_menu() {
 # Main script execution
 # ----------------------------------------
 log_info "Starting checking dependencies..."
-load_env
+#load_env
 echo ""
 echo '============================'
 while true; do    
     show_menu    
     read -p "Select an option [0-9]: " choice
     case $choice in
-        1) 
-			changeHostname            
-                       
-            changeTimezone 
-			
-            changeIP
+        1)
+            log_info "Installing Ansible..."
+            install_ansible
+            read -p "Press any key to exit..."
+            exit 0
+            ;;			
+        2)            
+            ansible_change_IP
 			log_info "IP address updated successfully."
             hostname -I
 			read -p "Press any key to continue..."
 			;;
-        2)
+        3)  
+            log_info "Changing IP address..."
+            changeIP   
+            hostname -I
 			read -p "Press any key to continue..."
             ;;
-        3)             
-			read -p "Press any key to continue..."
+        4)
+            log_info "Deploy SSHkey..."
+            deploy_sshKey            
+            log_info "Changing Hostname and Timezone..."
+            ansible_change_hostname_timezone
+            log_info "Hostname and Timezone updated successfully."
+            read -p "Press any key to continue..."
             ;;
-        4) createSSHKeyAndDeploy ;;
         5)
-            log_info "Installing Ansible..."
-            install_ansible
+            log_info "5..."
+            
             ;;
         6)
             log_info "Setupping Docker Swarm..."

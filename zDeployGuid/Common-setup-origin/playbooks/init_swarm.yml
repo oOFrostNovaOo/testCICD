@@ -1,6 +1,6 @@
 ---
 - name: Initialize Docker Swarm on leader
-  hosts: leader
+  hosts: leaders
   become: true
   tasks:
     - name: Initialize Swarm

@@ -1,4 +1,4 @@
----
+# This is an Ansible inventory file for a simple setup with one leader and two worker nodes.
 - name: Join Docker Swarm on worker nodes
   hosts: workers
   become: true

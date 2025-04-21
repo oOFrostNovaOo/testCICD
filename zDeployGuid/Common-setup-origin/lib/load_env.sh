@@ -35,7 +35,7 @@ function load_env() {
     declare -g DEFAULT_IP="$ip"
     # IP moi
     # Tìm hostname trong leader_nodes
-    declare -g IP=$(jq -r --arg ip "$ip" '.leader_nodes[] | select(.default_ip == $ip) | .ip' "$ENV_FILE")
+    declare -g IP=$(jq -r --arg ip "$ip" '.leader_nodes_list[] | select(.default_ip == $ip) | .ip' "$ENV_FILE")
     # Nếu không có, tìm trong worker_node_list
     if [ -z "$IP" ]; then
         IP=$(jq -r --arg ip "$ip" '.worker_node_list[] | select(.default_ip == $ip) | .ip' "$ENV_FILE")
@@ -68,8 +68,17 @@ function load_env() {
         echo "❌ No matching hostname found for IP $ip"
         exit 1
     fi
-
     declare -g HOSTNAME="$hostname"
+
+
+    # Tim current_user trong env.json
+    export REAL_USER=$(jq -r '.current_user' "$ENV_FILE")
+    export INFRA_STACK=$(jq -r '.infrastructure_stack_name' "$ENV_FILE")
+    export APP_STACK=$(jq -r '.application_stack_name' "$ENV_FILE")
+    export client_user=$(jq -r '.client_user' "$ENV_FILE")
+    # Tạo mảng từ các key trong worker_node_list
+    #mapfile -t NAME_WORKER_LIST < <(jq -r '.worker_node_list[] | .name' "$ENV_FILE")
+    mapfile -t IP_WORKER_LIST < <(jq -r '.worker_node_list[] | .ip' "$ENV_FILE")
     
     # In ket qua ra man hình
     echo "✅ ENV loaded:"
