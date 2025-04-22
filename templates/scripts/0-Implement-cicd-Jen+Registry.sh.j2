@@ -30,7 +30,7 @@ docker build -t custom/img-jenk-ans-ter -f ../docker/stack/jenkins/dockerfile .
 # sudo jq '. + { "insecure-registries": ["registry:5000"] }' /etc/docker/daemon.json | sudo tee /etc/docker/daemon.json.new && \
 # sudo mv /etc/docker/daemon.json.new /etc/docker/daemon.json && \
 # sudo systemctl restart docker
-ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/add_insecure_registry.yml
+ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/add_insecure_registry.yml --ask-become-pass
 
 # Deploy the stacks
 docker stack deploy -c ../docker/stack/jenkins/docker-compose.yml {{ STACK_NAME }}

@@ -1,7 +1,7 @@
 ---
 - name: Add insecure Docker registry
   hosts: all
-  become: true
+  #become: true
   tasks:
 
     - name: Read current daemon.json
