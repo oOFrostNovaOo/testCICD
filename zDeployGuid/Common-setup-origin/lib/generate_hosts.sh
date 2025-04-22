@@ -81,5 +81,6 @@ echo "" >> inventory.ini
 echo "[all:vars]" >> inventory.ini
 echo "ansible_user=ubuntu" >> inventory.ini  
 echo "ansible_ssh_private_key_file=~/.ssh/id_rsa" >> inventory.ini
+echo "ansible_ssh_common_args='-o ConnectTimeout=5 -o StrictHostKeyChecking=no'" >> inventory.ini
 
 echo "✅ Done! Generated host_vars + inventory.ini"

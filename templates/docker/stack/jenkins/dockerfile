@@ -1,0 +1,31 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y curl gnupg2 unzip python3 python3-pip software-properties-common lsb-release && \
+    # Install Docker CLI
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
+    # Install Ansible
+    pip3 install ansible --break-system-packages && \
+    # Install Terraform
+    curl -fsSL https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip -o terraform.zip && \
+    unzip terraform.zip -d /usr/local/bin && \
+    rm terraform.zip && \
+    # Clean up
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+    #echo '"insecure-registries": ["192.168.1.201:5000"]' > /etc/docker/daemon.json && \
+    #ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+
+USER jenkins
+# Create SSH key pair for user jenkins
+RUN mkdir -p /var/jenkins_home/.ssh && \
+    ssh-keygen -t rsa -b 4096 -N "" -f /var/jenkins_home/.ssh/id_rsa && \
+    cat /var/jenkins_home/.ssh/id_rsa.pub > /var/jenkins_home/.ssh/authorized_keys && \
+    chmod 700 /var/jenkins_home/.ssh && \
+    chmod 600 /var/jenkins_home/.ssh/id_rsa && \
+    chmod 644 /var/jenkins_home/.ssh/id_rsa.pub /var/jenkins_home/.ssh/authorized_keys

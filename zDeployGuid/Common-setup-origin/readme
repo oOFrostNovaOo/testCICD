@@ -1,7 +1,10 @@
 1. Install Ansible on Learer First
    sudo bash main.sh -> menu 1. Install Ansible
-2. Edit 2 files: inventory_pre.ini and config.env and then run without sudo
+2. Declare leader and worker in 2 files: inventory_pre.ini and config.env and then run without sudo
    bash main.sh -> menu 2
    a. Create vault file:
 ansible_user: ubuntu
 ansible_password: qwe123
+
+3. Add public key of controller to leader
+cat ./id_rsa.pub >> ~/.ssh/authorized_keys

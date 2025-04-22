@@ -11,11 +11,11 @@ services:
       - "9090:9090"
       - "8080:8090"
     networks:
-      - Infra_stack
+      - {{ NETWORK_NAME }}
     deploy:
       placement:
-        constraints: [node.hostname == vm01]
+        constraints: [node.hostname == {{ HOST_PROMETHEUS }}]
 
 networks:
-  Infra_stack:
+  {{ NETWORK_NAME }}:
     external: true

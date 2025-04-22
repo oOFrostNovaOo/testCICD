@@ -6,12 +6,12 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - Infra_stack
+      - {{ NETWORK_NAME }}
     deploy:
       placement:
-        constraints: [node.hostname == vm02]
+        constraints: [node.hostname == {{ HOST_GRAFANA }}]
     restart: always
     
 networks:
-  Infra_stack:
+  {{ NETWORK_NAME }}:
     external: true

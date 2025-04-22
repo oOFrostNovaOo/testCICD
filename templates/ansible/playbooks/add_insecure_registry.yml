@@ -1,0 +1,40 @@
+---
+- name: Add insecure Docker registry
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Read current daemon.json
+      slurp:
+        src: /etc/docker/daemon.json
+      register: daemon_config_raw
+      ignore_errors: yes
+
+    - name: Parse JSON if exists
+      set_fact:
+        daemon_config: "{{ daemon_config_raw['content'] | b64decode | from_json }}"
+      when: daemon_config_raw is defined and daemon_config_raw['content'] is defined
+      ignore_errors: yes
+
+    - name: Merge insecure-registries
+      set_fact:
+        new_daemon_config: >-
+          {{
+            (daemon_config | default({}))
+            | combine({ 'insecure-registries': ['registry:5000'] }, recursive=True)
+          }}
+
+    - name: Write new daemon.json
+      copy:
+        content: "{{ new_daemon_config | to_nice_json }}"
+        dest: /etc/docker/daemon.json
+        backup: yes
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Restart Docker
+      systemd:
+        name: docker
+        state: restarted
+        enabled: yes

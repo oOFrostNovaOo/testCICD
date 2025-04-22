@@ -17,9 +17,9 @@ RUN apt-get update && \
     unzip terraform.zip -d /usr/local/bin && \
     rm terraform.zip && \
     # Clean up
-    apt-get clean && rm -rf /var/lib/apt/lists/* \
-    echo '"insecure-registries": ["192.168.1.201:5000"]' > /etc/docker/daemon.json && \
-    ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+    #echo '"insecure-registries": ["192.168.1.201:5000"]' > /etc/docker/daemon.json && \
+    #ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
 
 USER jenkins
 # Create SSH key pair for user jenkins

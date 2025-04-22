@@ -6,18 +6,18 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - Infra_stack
+      - {{ NETWORK_NAME }}
     volumes:
       - registry_data:/var/lib/registry
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     deploy:
       placement:
-        constraints: [node.hostname == vm01]
+        constraints: [node.hostname == {{ HOST_LEADER }}]
 
 volumes:
   registry_data:
 
 networks:
-  Infra_stack:
+  {{ NETWORK_NAME }}:
     external: true
