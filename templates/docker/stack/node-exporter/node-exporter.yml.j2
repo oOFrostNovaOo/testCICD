@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  node-exporter:
+    image: prom/node-exporter
+    networks:
+      - {{ NETWORK_NAME }}
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+    ports:
+      - target: 9100
+        published: 9100
+        mode: host
+
+networks:
+  {{ NETWORK_NAME }}:
+    external: true

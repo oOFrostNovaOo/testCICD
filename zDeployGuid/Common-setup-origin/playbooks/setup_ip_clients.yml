@@ -1,0 +1,32 @@
+- name: Set static IP for workers
+  hosts: all
+  become: yes
+  vars_files:
+  - ../vault.yml
+  tasks:
+    - name: Find current netplan config file
+      find:
+        paths: /etc/netplan
+        patterns: "*.yaml"
+      register: netplan_files
+
+    - name: Set fact for netplan file path
+      set_fact:
+        netplan_path: "{{ netplan_files.files[0].path }}"
+
+    - name: backup netplaten config with timestamp
+      command: cp {{ netplan_path }} {{ netplan_path }}.{{ ansible_date_time.iso8601_basic_short }}.bak
+      when: netplan_files.matched > 0
+      register: backup_result
+      ignore_errors: yes
+
+    - name: Update netplan config with static IP
+      template:
+        src: netplan_static.j2
+        dest: "{{ netplan_path }}"
+        mode: '0644'
+
+    - name: Apply netplan
+      command: netplan apply
+
+

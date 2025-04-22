@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: custom/img-jenk-ans-ter:latest
+    network_mode: host   # dùng network host
+    user: root
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == {{ HOST_JENKINS }}
+      restart_policy:
+        condition: any
+
+volumes:
+  jenkins_data:

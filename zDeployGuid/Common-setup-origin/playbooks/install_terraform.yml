@@ -1,0 +1,38 @@
+- name: Install Terraform on Ubuntu
+  hosts: leaders
+  become: true
+
+  vars:
+    terraform_version: "1.6.6"
+    terraform_zip: "terraform_{{ terraform_version }}_linux_amd64.zip"
+    terraform_url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/{{ terraform_zip }}"
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - unzip
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: Download Terraform binary
+      get_url:
+        url: "{{ terraform_url }}"
+        dest: "/tmp/{{ terraform_zip }}"
+        mode: '0644'
+
+    - name: Unzip Terraform binary
+      unarchive:
+        src: "/tmp/{{ terraform_zip }}"
+        dest: /usr/local/bin/
+        remote_src: yes
+        mode: '0755'
+
+    - name: Check terraform version
+      command: terraform version
+      register: terraform_version_output
+
+    - name: Show terraform version
+      debug:
+        msg: "{{ terraform_version_output.stdout }}"

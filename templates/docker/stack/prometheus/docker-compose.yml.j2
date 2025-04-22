@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "9090:9090"
+      - "8080:8090"
+    networks:
+      - {{ NETWORK_NAME }}
+    deploy:
+      placement:
+        constraints: [node.hostname == {{ HOST_PROMETHEUS }}]
+
+networks:
+  {{ NETWORK_NAME }}:
+    external: true

@@ -1,0 +1,14 @@
+- name: Set static IP for workers
+  hosts: all
+  become: yes
+  vars_files:
+  tasks:
+    - name: Set hostname using hostnamectl
+      become: true
+      shell: "hostnamectl set-hostname {{ inventory_hostname }}"
+      register: hostname_result
+    
+    - name: change timezone to Ho Chi Minh
+      become: true
+      shell: "timedatectl set-timezone Asia/Ho_Chi_Minh"
+      register: timezone_result

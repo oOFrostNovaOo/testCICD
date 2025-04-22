@@ -1,0 +1,12 @@
+# This is an Ansible inventory file for a simple setup with one leader and two worker nodes.
+- name: Join Docker Swarm on worker nodes
+  hosts: workers
+  become: true
+  vars_files:
+    - swarm_token.yml
+
+  tasks:
+    - name: Join swarm
+      shell: docker swarm join --token {{ swarm_token }} {{ leader_ip }}:2377
+      args:
+        warn: false

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - {{ NETWORK_NAME }}
+    deploy:
+      placement:
+        constraints: [node.hostname == {{ HOST_GRAFANA }}]
+    restart: always
+    
+networks:
+  {{ NETWORK_NAME }}:
+    external: true
