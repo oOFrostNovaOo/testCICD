@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Check if Docker is running
+if ! docker info > /dev/null 2>&1; then
+    echo "Docker is not running. Please start Docker and try again."
+    exit 1
+fi
+
+# Deploy the Docker Compose stack
+echo "Deploying the Docker Compose stack..."
+# Check if the overlay network already exists
+if ! docker network ls | grep -q "{{ NETWORK_NAME }}"; then
+    echo "Creating overlay network '{{ NETWORK_NAME }}'..."
+    docker network create --driver overlay {{ NETWORK_NAME }}
+else
+    echo "Overlay network '{{ NETWORK_NAME }}' already exists."
+fi
+
+docker stack deploy -c ../docker/stack/prometheus/docker-compose.yml {{ STACK_NAME }}
+docker stack deploy -c ../docker/stack/node-exporter/node-exporter.yml {{ STACK_NAME }}
+docker stack deploy -c ../docker/stack/grafana/docker-compose.yml  {{ STACK_NAME }}
+
+echo "Infrastructure has been deployed."

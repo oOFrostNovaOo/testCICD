@@ -54,12 +54,12 @@ function show_menu() {
     echo "==============================================="
     echo "========= System Configuration Script ========="
     echo "1) Install Ansible"
-    echo "2) Ansible: Set IP address for clients"
-    echo "3) Change IP this machine"
+    echo "2) Change IP this machine"
+    echo "3) Ansible: Set IP address for clients"
     echo "4) Deploy SSH key + Change Hostname + Change Timezone"
-    echo "5) Install Ansible"
-    echo "6) Install Docker && setup Docker Swarm"
-    echo "7) Install Terraform"
+    echo "5) Install Docker && setup Docker Swarm"
+    echo "6) Install Terraform"
+    echo "7) "
     echo ""
 
     echo "0) Exit"
@@ -84,15 +84,14 @@ while true; do
             exit 0
             ;;			
         2)            
-            ansible_change_IP
-			log_info "IP address updated successfully."
+            log_info "Changing IP address..."
+            changeIP   
             hostname -I
 			read -p "Press any key to continue..."
 			;;
         3)  
-            log_info "Changing IP address..."
-            changeIP   
-            hostname -I
+            ansible_change_IP
+			log_info "IP address updated successfully."
 			read -p "Press any key to continue..."
             ;;
         4)
@@ -104,17 +103,17 @@ while true; do
             read -p "Press any key to continue..."
             ;;
         5)
-            log_info "5..."
-            
-            ;;
-        6)
             log_info "Setupping Docker Swarm..."
             implement_Docker_swarm
+            log_info "5..."
+            read -p "Press any key to continue..."            
             ;;
-        7)  
+        6)
             log_info "Installing Terraform..."
             install_terraform
-            ;;            
+            log_info "Terraform installed successfully."
+            read -p "Press any key to continue..."
+            ;;                 
 
         0) log_info "Exiting script." ; exit 0 ;;
         *) log_warn "Invalid option. Please choose 1-5." ;;

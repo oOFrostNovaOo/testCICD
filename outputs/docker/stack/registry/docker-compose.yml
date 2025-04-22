@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    networks:
+      - network_infra_stack
+    volumes:
+      - registry_data:/var/lib/registry
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    deploy:
+      placement:
+        constraints: [node.hostname == ]
+
+volumes:
+  registry_data:
+
+networks:
+  network_infra_stack:
+    external: true
